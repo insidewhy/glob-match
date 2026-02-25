@@ -89,8 +89,12 @@ fn glob_match_internal<'a>(
           if is_globstar {
             state.glob_index += 2;
 
-            if glob.len() == state.glob_index {
-              // A trailing ** segment without a following separator.
+            if glob.len() == state.glob_index
+              || (brace_stack.length > 0
+                && matches!(glob[state.glob_index], b'}' | b','))
+            {
+              // A trailing ** segment without a following separator
+              // (or at end of a brace alternative).
               state.globstar = state.wildcard;
             } else if (state.glob_index < 3 || glob[state.glob_index - 3] == b'/')
               && glob[state.glob_index] == b'/'
@@ -1484,6 +1488,11 @@ mod tests {
     // assert!(glob_match("a/**", "a"));
     assert!(glob_match("**", "a"));
     assert!(glob_match("a{,/**}", "a"));
+    assert!(glob_match("a{,/**}", "a/b"));
+    assert!(glob_match("a{,/**}", "a/b/c"));
+    assert!(glob_match("a{ ,**}", "a "));
+    assert!(glob_match("a{ ,**}", "a /b"));
+    assert!(glob_match("a{ ,**}", "a /b/c"));
     assert!(glob_match("**", "a/"));
     assert!(glob_match("a/**", "a/"));
     assert!(glob_match("**", "a/b/c/d"));
