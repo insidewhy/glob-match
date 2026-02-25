@@ -1,9 +1,10 @@
 [package]
-name = "glob-match"
+name = "glob-match-ultra"
 description = "An extremely fast glob matcher"
-version = "0.2.1"
+version = "0.2.2"
 license = "MIT"
-authors = ["Devon Govett <devongovett@gmail.com>"]
+authors = ["Devon Govett <devongovett@gmail.com>", "James Pike <github@chilon.net>"]
+repository = "https://github.com/insidewhy/glob-match"
 edition = "2021"
 
 [dev-dependencies]
